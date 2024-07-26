@@ -11,7 +11,7 @@ import { Octokit } from 'https://cdn.skypack.dev/@octokit/rest';
   async function sha256(text) {
     const bytes  = new TextEncoder().encode(text);
     const digest = await crypto.subtle.digest('SHA-256', bytes);
-    return Array.from(new Uint8Array(digest)).map(v => v.toString(16).padStart(2,'0')).join('');
+    return Array.from(new Uint8Array(digest)).map(v => v.toString(16).padStart(2, '0')).join('');
   }
 
   async function base64encode(text) {
@@ -42,6 +42,7 @@ import { Octokit } from 'https://cdn.skypack.dev/@octokit/rest';
       owner: OWNER,
       repo: REPO,
       path,
+      sha,
       message: 'Update from website',
       content: contentEncoded,
       committer: {
