@@ -21,7 +21,7 @@ import { Octokit } from 'https://cdn.skypack.dev/@octokit/rest';
     return Array.from(new Uint8Array(digest)).map(v => v.toString(16).padStart(2, '0')).join('');
   }
 
-  async function base64encode(text) {
+  function base64encode(text) {
     const bytes = new TextEncoder().encode(text);
     const binaryString = Array.from(bytes, byte => String.fromCodePoint(byte)).join('');
     return btoa(binaryString);
