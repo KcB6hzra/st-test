@@ -3,8 +3,10 @@ import { Octokit } from 'https://cdn.skypack.dev/@octokit/rest';
 (async () => {
   const OWNER = 'KcB6hzra';
   const REPO = 'test-storage';
-  const COMMITTER_NAME = 'KcB6hzra Website';
-  const COMMITTER_EMAIL = '176685668+KcB6hzra@users.noreply.github.com';
+  const COMMITTER = {
+    name: 'KcB6hzra Website',
+    email: '176685668+KcB6hzra@users.noreply.github.com',
+  };
 
   const pat = localStorage.test_storage_pat;
 
@@ -28,7 +30,7 @@ import { Octokit } from 'https://cdn.skypack.dev/@octokit/rest';
   async function save(octokit, path, content) {
     const contentEncoded = base64encode(content);
     console.log(`contentEncoded: ${contentEncoded}`);
-    const sha = getFileHash(octokit, path);
+    const sha = await getFileHash(octokit, path);
     console.log(`sha: ${sha}`);
     const result = await octokit.repos.createOrUpdateFileContents({
       owner: OWNER,
@@ -37,14 +39,8 @@ import { Octokit } from 'https://cdn.skypack.dev/@octokit/rest';
       sha,
       message: 'Update from website',
       content: contentEncoded,
-      committer: {
-        name: COMMITTER_NAME,
-        email: COMMITTER_EMAIL,
-      },
-      author: {
-        name: COMMITTER_NAME,
-        email: COMMITTER_EMAIL,
-      },
+      committer: COMMITTER,
+      author: COMMITTER,
     });
     console.log(`result: ${result}`);
   }
