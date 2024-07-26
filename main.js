@@ -1,7 +1,12 @@
 import { Octokit } from 'https://cdn.skypack.dev/@octokit/rest';
 
 (async () => {
-  const pat = localStorage.pat;
+  const OWNER = 'KcB6hzra';
+  const REPO = 'test-storage';
+  const COMMITTER_NAME = 'KcB6hzra Website';
+  const COMMITTER_EMAIL = '176685668+KcB6hzra@users.noreply.github.com';
+
+  const pat = localStorage.test_storage_pat;
 
   if (await sha256(pat) === 'ec66af468346007b6318e1589477dd79a8eb13a51d0d7f467b2113a287d13349') {
     window.octokit = new Octokit({ auth: localStorage.pat });
@@ -21,24 +26,9 @@ import { Octokit } from 'https://cdn.skypack.dev/@octokit/rest';
   }
 
   async function save(octokit, path, content) {
-    const OWNER = 'KcB6hzra';
-    const REPO = 'test-storage';
-    const COMMITTER_NAME = 'KcB6hzra Website';
-    const COMMITTER_EMAIL = '176685668+KcB6hzra@users.noreply.github.com';
-
     const contentEncoded = base64encode(content);
-
-    const file = await octokit.rest.repos.getContent({
-      owner: OWNER,
-      repo: REPO,
-      path,
-    });
-
-    console.log(`file: ${file}`);
-
-    const { sha } = file.data;
-
-    const { data } = await octokit.repos.createOrUpdateFileContents({
+    const sha = getFileHash(octokit, path);
+    const result = await octokit.repos.createOrUpdateFileContents({
       owner: OWNER,
       repo: REPO,
       path,
@@ -54,8 +44,22 @@ import { Octokit } from 'https://cdn.skypack.dev/@octokit/rest';
         email: COMMITTER_EMAIL,
       },
     });
+    console.log(`result: ${result}`);
+  }
 
-    console.log(`data: ${data}`);
+  async function getFileHash(octokit, path) {
+    try {
+      const file = await octokit.rest.repos.getContent({
+        owner: OWNER,
+        repo: REPO,
+        path,
+      });
+      console.log(`file: ${file}`);
+      return file.data;
+    } catch (e) {
+      console.log(e);
+      return void 0;
+    }
   }
 })();
 
