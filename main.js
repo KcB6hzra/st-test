@@ -29,10 +29,8 @@ import { Octokit } from 'https://cdn.skypack.dev/@octokit/rest';
 
   async function save(octokit, path, content) {
     const contentEncoded = base64encode(content);
-    console.log('contentEncoded: ', contentEncoded);
     const sha = await getFileHash(octokit, path);
-    console.log('sha: ', sha);
-    const result = await octokit.repos.createOrUpdateFileContents({
+    await octokit.repos.createOrUpdateFileContents({
       owner: OWNER,
       repo: REPO,
       path,
@@ -42,7 +40,6 @@ import { Octokit } from 'https://cdn.skypack.dev/@octokit/rest';
       committer: COMMITTER,
       author: COMMITTER,
     });
-    console.log('result: ', result);
   }
 
   async function getFileHash(octokit, path) {
@@ -52,10 +49,8 @@ import { Octokit } from 'https://cdn.skypack.dev/@octokit/rest';
         repo: REPO,
         path,
       });
-      console.log('file: ', file);
       return file.data.sha;
     } catch (e) {
-      console.log(e);
       return void 0;
     }
   }
