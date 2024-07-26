@@ -31,7 +31,7 @@ import { Octokit } from 'https://cdn.skypack.dev/@octokit/rest';
     const contentEncoded = base64encode(content);
     console.log('contentEncoded: ', contentEncoded);
     const sha = await getFileHash(octokit, path);
-    console.log(`sha: ${sha}`);
+    console.log('sha: ', sha);
     const result = await octokit.repos.createOrUpdateFileContents({
       owner: OWNER,
       repo: REPO,
@@ -53,7 +53,7 @@ import { Octokit } from 'https://cdn.skypack.dev/@octokit/rest';
         path,
       });
       console.log('file: ', file);
-      return file.data;
+      return file.data.sha;
     } catch (e) {
       console.log(e);
       return void 0;
