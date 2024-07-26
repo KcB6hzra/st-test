@@ -11,7 +11,7 @@ import { Octokit } from 'https://cdn.skypack.dev/@octokit/rest';
   const pat = localStorage.test_storage_pat;
 
   if (await sha256(pat) === 'ec66af468346007b6318e1589477dd79a8eb13a51d0d7f467b2113a287d13349') {
-    window.octokit = new Octokit({ auth: localStorage.pat });
+    window.octokit = new Octokit({ auth: pat });
     window.save = save;
   }
 
